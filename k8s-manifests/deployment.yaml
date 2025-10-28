@@ -16,6 +16,9 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:latest  # De container image die ArgoCD moet deployen
+        image: nginx:latest
         ports:
         - containerPort: 80
+        resources:           # <<< ESSENTIEEL VOOR AUTOSCALING
+          requests:
+            cpu: "100m"      # 100 millicpu aangevraagd
