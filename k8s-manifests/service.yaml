@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitops-webapp-service
+spec:
+  # Kiest de Pods met het label 'app: gitops-demo' (de Deployment)
+  selector:
+    app: gitops-demo
+  ports:
+    - protocol: TCP
+      port: 80       # De poort van de Service
+      targetPort: 80 # De poort van de Container (in de Deployment)
