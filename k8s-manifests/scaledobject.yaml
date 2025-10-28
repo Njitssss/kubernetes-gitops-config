@@ -2,17 +2,17 @@ apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: webapp-cpu-scaler
-  namespace: default # De namespace waar de webapp draait (standaard: 'default')
+  namespace: default
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: gitops-webapp # De naam van de Deployment
-  minReplicaCount: 1     # Minimum 1 replica
-  maxReplicaCount: 5     # Maximum 5 replica's
-  pollingInterval: 30    # KEDA controleert metrics elke 30 seconden
+    name: gitops-webapp
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  pollingInterval: 30 
   triggers:
   - type: cpu
     metadata:
-      metricType: Utilization
+      metricType: Utilization 
       value: "70"
