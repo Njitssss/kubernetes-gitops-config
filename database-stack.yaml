@@ -1,0 +1,101 @@
+# 1. Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: database-ns
+
+---
+# 2. Persistent Volume Claim (PVC)
+# Minikube zal automatisch een PersistentVolume (PV) voor deze claim provisionen
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: database-ns # BELANGRIJK: Plaats in de database-ns
+spec:
+  accessModes:
+    - ReadWriteOnce # Alleen toegankelijk door één node/pod tegelijk
+  resources:
+    requests:
+      storage: 1Gi # Vraag 1 Gigabyte opslag aan
+
+---
+# 3. PostgreSQL Deployment (Database)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-db
+  namespace: database-ns
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        env:
+        - name: POSTGRES_DB
+          value: mydatabase
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: "stijn-wachtwoord123!" # Gebruik een sterk wachtwoord!
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data # Standaard locatie voor PostgreSQL data
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: postgres-pvc # Koppeling naar de PVC
+
+---
+# 4. PostgreSQL Service (ClusterIP)
+# Alleen intern bereikbaar via de service-naam
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: database-ns
+  labels:
+    app: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+
+---
+# 5. Adminer Deployment (Webinterface)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adminer
+  namespace: database-ns
+  labels:
+    app: adminer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adminer
+  template:
+    metadata:
+      labels:
+        app: adminer
+    spec:
+      containers:
+      - name: adminer-container
+        image: adminer:latest
+        ports:
+        - containerPort: 8080 # Adminer draait standaard op poort 8080

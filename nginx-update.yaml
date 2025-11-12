@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    # 1. Het upstream block definieert de groep backend servers (Load Balancing)
+    upstream apache_upstream {
+        server apache-service-1; # Verwijst naar de ClusterIP Service 1
+        server apache-service-2; # Verwijst naar de ClusterIP Service 2
+    }
+
+    # 2. Het server block vertelt NGINX hoe inkomend verkeer te behandelen
+    server {
+        listen 80;
+        location / {
+            # Stuur al het verkeer door naar de gedefinieerde upstream groep
+            proxy_pass http://apache_upstream; 
+        }
+    }

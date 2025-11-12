@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apache-ingress
+  annotations:
+    # Zorgt ervoor dat de NGINX controller deze regel oppikt
+    kubernetes.io/ingress.class: nginx 
+spec:
+  rules:
+  - host: mijn-apache-app.info
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: apache-app # Verwijst naar de Service in Stap 2
+            port:
+              number: 80

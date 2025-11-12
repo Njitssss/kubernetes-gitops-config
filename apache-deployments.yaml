@@ -1,0 +1,47 @@
+# apache-deployments.yaml
+
+# Apache Server 1
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-1-deployment
+  labels:
+    app: apache-1 # Uniek label voor de eerste server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apache-1
+  template:
+    metadata:
+      labels:
+        app: apache-1
+    spec:
+      containers:
+      - name: apache-1-container
+        image: httpd:2.4 # Gebruik de officiële Apache image
+        ports:
+        - containerPort: 80
+---
+# Apache Server 2
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-2-deployment
+  labels:
+    app: apache-2 # Uniek label voor de tweede server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apache-2
+  template:
+    metadata:
+      labels:
+        app: apache-2
+    spec:
+      containers:
+      - name: apache-2-container
+        image: httpd:2.4
+        ports:
+        - containerPort: 80

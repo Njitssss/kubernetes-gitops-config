@@ -1,0 +1,21 @@
+# argocd-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: webapp-gitops
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/louislam/uptime-kuma # Vervang dit door uw Git repository URL!
+    targetRevision: HEAD
+    path: webapp-chart # Dit is de map in Git waar de Helm Chart staat
+    plugin:
+      name: helm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,16 @@
+# nginx-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-frontend-service
+spec:
+  # Waarom NodePort: Maakt de service extern bereikbaar via het IP van de Minikube node.
+  type: NodePort 
+  selector:
+    # Matcht de labels van de NGINX Deployment Pods uit Stap 2
+    app: web
+    component: nginx-frontend
+  ports:
+  - port: 80       # De poort waarop de Service luistert
+    targetPort: 80 # De poort in de container (NGINX draait op poort 80)
+    # nodePort: 30080 # Optioneel: u kunt een vaste poort forceren (tussen 30000 en 32767)

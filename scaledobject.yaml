@@ -1,0 +1,18 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: webapp-cpu-scaler
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-webapp-release-webapp-chart
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  pollingInterval: 30 
+  triggers:
+  - type: cpu
+    metadata:
+      metricType: Utilization
+      value: "70"

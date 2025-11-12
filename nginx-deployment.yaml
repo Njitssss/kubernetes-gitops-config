@@ -1,0 +1,26 @@
+# nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: web
+    component: nginx-frontend
+spec:
+  # x = 3, zoals gekozen voor High Availability (HA)
+  replicas: 3 
+  selector:
+    matchLabels:
+      app: web
+      component: nginx-frontend
+  template:
+    metadata:
+      labels:
+        app: web
+        component: nginx-frontend
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80

@@ -1,0 +1,27 @@
+# apache-service.yaml
+
+# Service voor de eerste Apache Deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-service-1
+spec:
+  # Standaard ClusterIP
+  selector:
+    app: apache-1 # Koppelt aan de Pod uit apache-1-deployment
+  ports:
+  - port: 80
+    targetPort: 80
+---
+# Service voor de tweede Apache Deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-service-2
+spec:
+  # Standaard ClusterIP
+  selector:
+    app: apache-2 # Koppelt aan de Pod uit apache-2-deployment
+  ports:
+  - port: 80
+    targetPort: 80

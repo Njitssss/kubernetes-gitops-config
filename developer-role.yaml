@@ -1,0 +1,12 @@
+# developer-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: developer-role
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["rbac.authorization.k8s.io"] # Uitzondering: geen RBAC-beheer
+  resources: ["*"]
+  verbs: ["get", "list", "watch"] # Alleen lezen, geen aanpassingen
